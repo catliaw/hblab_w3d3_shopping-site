@@ -82,18 +82,27 @@ def show_shopping_cart():
     order_cost = 0
     melon_list = []
 
-    for melon_id in cart_dict:
-        melon_info = melons.get_by_id(melon_id)
-
-        # melon_qty = cart[melon_id]
-        melon_info.quantity = cart_dict[melon_id]
-
-        melon_info.total_price = melon_info.quantity * melon_info.price
-
-        # melon_list.append(melons.get_by_id(melon_id))
-        melon_list.append(melon_info)      
+    
+    if not cart_dict: # want this if to return True, so code below will run.
+        # when cart_dict is empty, cart_dict = False
+        # so not cart_dict = not False --> True
+        # so if not cart_dict = True, means cart_dict is still empty
+        flash("Your cart is empty!")
         
-        order_cost += melon_info.total_price
+    else:
+        for melon_id in cart_dict:
+           
+            melon_info = melons.get_by_id(melon_id)
+
+            # melon_qty = cart[melon_id]
+            melon_info.quantity = cart_dict[melon_id]
+
+            melon_info.total_price = melon_info.quantity * melon_info.price
+
+            # melon_list.append(melons.get_by_id(melon_id))
+            melon_list.append(melon_info)      
+            
+            order_cost += melon_info.total_price
 
     return render_template("cart.html",
                             melon_list=melon_list,
